@@ -3,16 +3,9 @@ const { WebClient } = require('@slack/web-api');
 const keyBy = require('lodash.keyby');
 const omit = require('lodash.omit');
 const mapValues = require('lodash.mapvalues');
+const lzString = require('lz-string');
 
-function messageAttachmentFromLink(link) {
-  return {
-    "color": "#36a64f",
-    "title": link.url,
-    "title_link": link.url,
-    "footer": "Vega Editor",
-    url: link.url
-  };
-}
+const VEGA_EDITOR_BASE_URL = 'https://vega.github.io/editor/#/url/';
 
 if (process.env.NODE_ENV !== 'production') {
   // load dev .env config
@@ -46,7 +39,7 @@ slackEvents.on('link_shared', (event, body, headers) => {
   console.dir(event.links);
 
   // Call a helper that transforms the URL into a promise for an attachment suitable for Slack
-  Promise.all(event.links.map(messageAttachmentFromLink))
+  Promise.all(event.links.map(getLinkInfo))
     // Transform the array of attachments to an unfurls object keyed by URL
     .then(attachments => keyBy(attachments, 'url'))
     .then(unfurls => mapValues(unfurls, attachment => omit(attachment, 'url')))
@@ -71,3 +64,42 @@ slackEvents.on('error', (error) => {
   // Log a message when the server is ready
   console.log(`Listening for events on port: ${server.address().port}`);
 })();
+
+
+function getLinkInfo(link) {
+  const linkInfo = {
+    "color": "#36a64f",
+    "title": link.url,
+    "title_link": link.url,
+    "footer": "Vega Slack",
+    url: link.url
+  };
+  if (link.url.startsWith(VEGA_EDITOR_BASE_URL)) {
+    // extract vega spec from url
+    const vegaUrlPart = link.url.replace(VEGA_EDITOR_BASE_URL, '');
+    const vegaSpecPosition = vegaUrlPart.indexOf('/');
+    const vegaSpecType = vegaUrlPart.substring(0, vegaSpecPosition);
+    const compressedVegaSpec = vegaUrlPart.substring(vegaSpecPosition);
+    const vegaSpecString = lzString.decompressFromEncodedURIComponent(compressedVegaSpec);
+    const vegaSpec = JSON.parse(vegaSpecString);
+    console.log(vegaSpec);
+    
+    // add vega spec title and description
+    const title = vegaSpec['title'];
+    const description = vegaSpec['description'];
+    if (title !== undefined) {
+      linkInfo['title'] = title;
+    }
+    else if (description !== undefined) {
+      // use description for link title
+      linkInfo['text'] = description;
+    }
+
+    if (description !== undefined) {
+      // add description
+      linkInfo['text'] = description;
+    }
+    console.log(`\tspec type: ${vegaSpecType}`);
+  }
+  return linkInfo;
+}
