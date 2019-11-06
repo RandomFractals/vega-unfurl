@@ -34,6 +34,7 @@
     "dotenv": "^8.2.0",
     "lodash.keyby": "^4.6.0",
     "lodash.mapvalues": "^4.6.0",
-    "lodash.omit": "^4.5.0"
+    "lodash.omit": "^4.5.0",
+    "lz-string": "^1.4.4"
   }
 }
