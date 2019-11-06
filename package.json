@@ -1,0 +1,39 @@
+{
+  "name": "vega-unfurl",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Slack app for Vega Editor links preview",
+  "license": "Apache-2.0",
+  "author": "Random Fractals, Inc.",
+  "contributors": [
+    "Taras Novak"
+  ],
+  "readme": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RandomFractals/vega-unfurl"
+  },
+  "bugs": "https://github.com/RandomFractals/vega-unfurl/issues",
+  "homepage": "https://github.com/RandomFractals/vega-unfurl/README.md",
+  "keywords": [
+    "Vega",
+    "Editor",
+    "Slack App",
+    "links preview"
+  ],
+  "engines": {
+    "node": "10.x"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@slack/events-api": "^2.3.0",
+    "@slack/web-api": "^5.4.0",
+    "dotenv": "^8.2.0",
+    "lodash.keyby": "^4.6.0",
+    "lodash.mapvalues": "^4.6.0",
+    "lodash.omit": "^4.5.0"
+  }
+}
