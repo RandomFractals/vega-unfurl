@@ -6,6 +6,7 @@ const mapValues = require('lodash.mapvalues');
 const lzString = require('lz-string');
 
 const VEGA_EDITOR_BASE_URL = 'https://vega.github.io/editor/#/url/';
+const VEGA_SCHEMA_BASE_URL = 'https://vega.github.io/schema/';
 
 if (process.env.NODE_ENV !== 'production') {
   // load dev .env config
@@ -76,30 +77,49 @@ function getLinkInfo(link) {
   };
   if (link.url.startsWith(VEGA_EDITOR_BASE_URL)) {
     // extract vega spec from url
-    const vegaUrlPart = link.url.replace(VEGA_EDITOR_BASE_URL, '');
-    const vegaSpecPosition = vegaUrlPart.indexOf('/');
-    const vegaSpecType = vegaUrlPart.substring(0, vegaSpecPosition);
-    const compressedVegaSpec = vegaUrlPart.substring(vegaSpecPosition);
+    const vegaSpecUrlPart = link.url.replace(VEGA_EDITOR_BASE_URL, '');
+    const vegaSpecPosition = vegaSpecUrlPart.indexOf('/');
+    const vegaSpecType = vegaSpecUrlPart.substring(0, vegaSpecPosition);
+    console.log(`\tspec type: ${vegaSpecType}`);
+
+    const compressedVegaSpec = vegaSpecUrlPart.substring(vegaSpecPosition + 1);
     const vegaSpecString = lzString.decompressFromEncodedURIComponent(compressedVegaSpec);
     const vegaSpec = JSON.parse(vegaSpecString);
-    console.log(vegaSpec);
-    
-    // add vega spec title and description
+    // console.log(vegaSpecString);
+
+    // extract vega spec title, description and json schema info
     const title = vegaSpec['title'];
     const description = vegaSpec['description'];
+    const jsonSchemaUrl = vegaSpec['$schema'];
+
+    // add title
     if (title !== undefined) {
       linkInfo['title'] = title;
     }
     else if (description !== undefined) {
       // use description for link title
+      linkInfo['title'] = description;
+    }
+
+    // add description
+    if (description !== undefined) {
       linkInfo['text'] = description;
     }
 
-    if (description !== undefined) {
-      // add description
-      linkInfo['text'] = description;
+    // add json schema info
+    const fields = [];
+    if (jsonSchemaUrl !== undefined) {
+      const vegaSchemaTitle = jsonSchemaUrl.replace(VEGA_SCHEMA_BASE_URL, '').replace('/', ' | ').replace('.json', '')
+      fields.push({
+        title: 'schema',
+        value: `:small_blue_diamond: <${jsonSchemaUrl}|${vegaSchemaTitle}>`
+      });
     }
-    console.log(`\tspec type: ${vegaSpecType}`);
+
+    if (fields.length > 0) {
+      // add fields
+      linkInfo.fields = fields;
+    }
   }
   return linkInfo;
 }
