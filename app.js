@@ -116,10 +116,76 @@ function getLinkInfo(link) {
       });
     }
 
+    // add data links
+    const dataLinks = getDataLinks(vegaSpec);
+    if (dataLinks.length > 0) {
+      fields.push({
+        title: 'data',
+        value: dataLinks.map(link => `:small_blue_diamond: <${link}|${link}>`).join('\n')
+      });
+    }
+
     if (fields.length > 0) {
       // add fields
       linkInfo.fields = fields;
     }
   }
   return linkInfo;
+} // end of getLinkInfo()
+
+/**
+ * Extracts data urls from Vega spec.
+ * @param spec Vega spec document root or nested data references to extract.
+ */
+function getDataLinks(spec) {
+  // get top level data urls
+  let dataUrls = getDataUrls(spec);
+
+  // add nested spec data urls for view compositions (facets, repeats, etc.)
+  dataUrls = dataUrls.concat(getDataUrls(spec['spec']));
+  console.log('dataUrls:', dataUrls);
+  return dataUrls.filter(dataUrl => (dataUrl.startsWith('http://') || dataUrl.startsWith('https://')));
+}
+  
+/**
+ * Recursively extracts data urls from the specified vega spec document
+ * or knowwn nested data elements.
+ * @param spec Vega spec document root or nested data references to extract.
+ */
+function getDataUrls(spec) {
+  let dataUrls = [];
+  if (spec === undefined){
+    return dataUrls; // base case
+  }
+  const data = spec['data'];
+  const transforms = spec['transform'];
+  let layers = [];
+  layers = layers.concat(spec['layer']);
+  layers = layers.concat(spec['concat']);
+  layers = layers.concat(spec['hconcat']);
+  layers = layers.concat(spec['vconcat']);
+  if (data !== undefined) {
+    // get top level data references
+    if (Array.isArray(data)) {
+      data.filter(d => d['url'] !== undefined).forEach(d => {
+        dataUrls.push(d['url']);
+      });
+    }
+    else if (data['url'] !== undefined) {
+      dataUrls.push(data['url']);
+    }
+  }
+  if (layers !== undefined && Array.isArray(layers)) {
+    // get layers data references
+    layers.forEach(layer => {
+      dataUrls = dataUrls.concat(getDataUrls(layer));
+    });
+  }
+  if (transforms !== undefined) {
+    // get transform data references
+    transforms.forEach(transformData => {
+      dataUrls = dataUrls.concat(getDataUrls(transformData['from']));
+    });
+  }
+  return dataUrls;
 }
