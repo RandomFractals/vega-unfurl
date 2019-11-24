@@ -43,7 +43,7 @@ description and json schema information extracted from the shared encoded link.
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
   "title": "Historgram",
   "description": "Select horsepower bins and get data.",
-  "data": {"url": "https://raw.githubusercontent.com/vega/vega-datasets/master/data/cars.json"},
+  "data": {"url": "https://vega.github.io/vega-datasets/data/cars.json"},
   "mark": "bar",
   "encoding": {
     "x": {"field": "Horsepower", "type": "quantitative", "bin": true},
