@@ -36,6 +36,12 @@ description and json schema information extracted from the shared encoded link.
 ![Vega Unfurl Example](https://github.com/RandomFractals/vega-unfurl/blob/master/images/vega-unfurl-example.png?raw=true 
  "Vega Unfurl Example")
 
+# Dev Log
+
+See this dev.to post for more info:
+
+https://dev.to/tarasnovak/vega-unfurl-slack-app-13i8
+
 # References
 
 [Everything you ever wanted to know about unfurling ...](https://medium.com/slack-developer-blog/everything-you-ever-wanted-to-know-about-unfurling-but-were-afraid-to-ask-or-how-to-make-your-e64b4bb9254)
