@@ -36,6 +36,33 @@ description and json schema information extracted from the shared encoded link.
 ![Vega Unfurl Example](https://github.com/RandomFractals/vega-unfurl/blob/master/images/vega-unfurl-example.png?raw=true 
  "Vega Unfurl Example")
 
+### Example with Data link
+
+```json
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "title": "Historgram",
+  "description": "Select horsepower bins and get data.",
+  "data": {"url": "https://raw.githubusercontent.com/vega/vega-datasets/master/data/cars.json"},
+  "mark": "bar",
+  "encoding": {
+    "x": {"field": "Horsepower", "type": "quantitative", "bin": true},
+     "y": {
+        "aggregate": "count",
+        "type": "quantitative"
+     }
+  },
+  "selection": {
+    "select": {"type": "multi"}
+  }
+}
+```
+
+Unfurls to:
+
+![Vega Unfurl Data Links](https://github.com/RandomFractals/vega-unfurl/blob/master/images/vega-unfurl-data.png?raw=true 
+ "Vega Unfurl Data Links Example")
+
 # Dev Log
 
 See this dev.to post for more info:
