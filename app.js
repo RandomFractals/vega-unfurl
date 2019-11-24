@@ -7,6 +7,7 @@ const lzString = require('lz-string');
 
 const VEGA_EDITOR_BASE_URL = 'https://vega.github.io/editor/#/url/';
 const VEGA_SCHEMA_BASE_URL = 'https://vega.github.io/schema/';
+const VEGA_DATA_BASE_URL = 'https://vega.github.io/vega-datasets/';
 
 if (process.env.NODE_ENV !== 'production') {
   // load dev .env config
@@ -139,12 +140,23 @@ function getLinkInfo(link) {
  */
 function getDataLinks(spec) {
   // get top level data urls
-  let dataUrls = getDataUrls(spec);
+  const dataUrls = getDataUrls(spec);
 
   // add nested spec data urls for view compositions (facets, repeats, etc.)
   dataUrls = dataUrls.concat(getDataUrls(spec['spec']));
   console.log('dataUrls:', dataUrls);
-  return dataUrls.filter(dataUrl => (dataUrl.startsWith('http://') || dataUrl.startsWith('https://')));
+
+  // create data links to attach
+  return dataUrls.map(dataUrl => {
+    if (dataUrl.startsWith('http://') || dataUrl.startsWith('https://')) {
+      // add remote data source reference
+      return dataUrl;
+    }
+    else {
+      // convert relative data urls to vega data sets references for built-in examples
+      return (VEGA_DATA_BASE_URL + dataUrl);
+    }
+  });
 }
   
 /**
