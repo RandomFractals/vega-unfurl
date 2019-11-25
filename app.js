@@ -9,27 +9,21 @@ const VEGA_EDITOR_BASE_URL = 'https://vega.github.io/editor/#/url/';
 const VEGA_SCHEMA_BASE_URL = 'https://vega.github.io/schema/';
 const VEGA_DATA_BASE_URL = 'https://vega.github.io/vega-datasets/';
 
-if (process.env.NODE_ENV !== 'production') {
-  // load dev .env config
-  require('dotenv').config();
-}
+// load dev .env config
+require('dotenv').config();
 
-// Read the signing secret from the environment variables
+// create Slack events adapter with envelope data and headers
 const slackSigningSecret = process.env.SLACK_SIGNING_SECRET;
-
-// Initialize the adapter to trigger listeners with envelope data and headers
 const slackEvents = createEventAdapter(slackSigningSecret, {
   includeBody: true,
   includeHeaders: true,
 });
 
-// Initialize a Web Client
+// create Slack web client
 const slack = new WebClient(process.env.SLACK_ACCESS_TOKEN);
-
-// Read the port from the environment variables, fallback to 3000 default.
 const port = process.env.PORT || 3000;
 
-// Attach listeners to events by Slack Event "type". See: https://api.slack.com/events/message.im
+// add link_shared Slack event handler
 slackEvents.on('link_shared', (event, body, headers) => {
   console.log(`\nlinks shared event: \n\tfrom user: ${event.user} in channel: ${event.channel}`);
   console.log(`\tevent id: ${body.event_id} event time: ${body.event_time}`);
@@ -40,12 +34,12 @@ slackEvents.on('link_shared', (event, body, headers) => {
   console.log('\tlinks:');
   console.dir(event.links);
 
-  // Call a helper that transforms the URL into a promise for an attachment suitable for Slack
+  // transform all Vega links to unfurled attachments
   Promise.all(event.links.map(getLinkInfo))
-    // Transform the array of attachments to an unfurls object keyed by URL
+    // transform expended link info to unfurls keyed by url
     .then(attachments => keyBy(attachments, 'url'))
     .then(unfurls => mapValues(unfurls, attachment => omit(attachment, 'url')))
-    // Invoke the Slack Web API to append the attachment
+    // send unfurled link attachements to Slack
     .then(unfurls => slack.apiCall('chat.unfurl', {
         channel: event.channel,
         ts: event.message_ts, 
@@ -54,21 +48,26 @@ slackEvents.on('link_shared', (event, body, headers) => {
     .catch(console.error);
 });
 
-// All errors in listeners are caught here. If this weren't caught, the program would terminate.
+// add generic Slack events error handler
 slackEvents.on('error', (error) => {
-  console.log(error.name); // TypeError
+  console.log(error);
 });
 
 (async () => {
-  // Start the built-in server
+  // start the built-in server
   const server = await slackEvents.start(port);
 
-  // Log a message when the server is ready
+  // log server started message
   console.log(`Listening for events on port: ${server.address().port}`);
 })();
 
-
+/**
+ * Converts shared Slack link to an unfurl object
+ * for custom vega unrul message attachment.
+ * @param {string} link The Vega link to unfurl.
+ */
 function getLinkInfo(link) {
+  // create initial unfurl link info
   const linkInfo = {
     "color": "#36a64f",
     "title": link.url,
@@ -76,6 +75,7 @@ function getLinkInfo(link) {
     "footer": "Vega Slack",
     url: link.url
   };
+
   if (link.url.startsWith(VEGA_EDITOR_BASE_URL)) {
     // extract vega spec from url
     const vegaSpecUrlPart = link.url.replace(VEGA_EDITOR_BASE_URL, '');
@@ -134,13 +134,14 @@ function getLinkInfo(link) {
   return linkInfo;
 } // end of getLinkInfo()
 
+
 /**
  * Extracts data urls from Vega spec.
- * @param spec Vega spec document root or nested data references to extract.
+ * @param spec Vega spec document.
  */
 function getDataLinks(spec) {
   // get top level data urls
-  const dataUrls = getDataUrls(spec);
+  let dataUrls = getDataUrls(spec);
 
   // add nested spec data urls for view compositions (facets, repeats, etc.)
   dataUrls = dataUrls.concat(getDataUrls(spec['spec']));
@@ -158,11 +159,11 @@ function getDataLinks(spec) {
     }
   });
 }
-  
+
+
 /**
- * Recursively extracts data urls from the specified vega spec document
- * or knowwn nested data elements.
- * @param spec Vega spec document root or nested data references to extract.
+ * Recursively extracts data urls from the specified vega spec document.
+ * @param spec Vega spec document root or nested vega data container.
  */
 function getDataUrls(spec) {
   let dataUrls = [];
