@@ -23,8 +23,9 @@ function getLinkInfo(link) {
   };
 
   if (link.url.startsWith(VEGA_EDITOR_BASE_URL)) {
-    // extract vega spec from url
-    const vegaSpec = getVegaSpec(VEGA_EDITOR_BASE_URL, link.url);
+    // extract vega spec info from url
+    const vegaSpecInfo = getVegaSpecInfo(VEGA_EDITOR_BASE_URL, link.url);
+    const vegaSpec = vegaSpecInfo.spec;
 
     // extract vega spec title, description and json schema info
     const title = vegaSpec['title'];
@@ -74,11 +75,11 @@ function getLinkInfo(link) {
 
 
 /**
- * Creates Vega spec from encoded vega spec url.
+ * Creates Vega spec info from encoded vega spec url.
  * @param {string} baseUrl Vega spec base url to strip out.
  * @param {*} vegaSpecUrl Full Vega spec url.
  */
-function getVegaSpec(baseUrl, vegaSpecUrl) {
+function getVegaSpecInfo(baseUrl, vegaSpecUrl) {
   // extract vega spec from url
   const vegaSpecUrlPart = vegaSpecUrl.replace(baseUrl, '');
   const vegaSpecPosition = vegaSpecUrlPart.indexOf('/');
@@ -89,7 +90,10 @@ function getVegaSpec(baseUrl, vegaSpecUrl) {
   const vegaSpecString = lzString.decompressFromEncodedURIComponent(compressedVegaSpec);
   const vegaSpec = JSON.parse(vegaSpecString);  
   // console.log(vegaSpecString);
-  return vegaSpec;
+  return {
+    type: vegaSpecType,
+    spec: vegaSpec
+  };
 }
 
 
