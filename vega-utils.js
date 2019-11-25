@@ -5,6 +5,7 @@ const lzString = require('lz-string');
 const VEGA_EDITOR_BASE_URL = 'https://vega.github.io/editor/#/url/';
 const VEGA_SCHEMA_BASE_URL = 'https://vega.github.io/schema/';
 const VEGA_DATA_BASE_URL = 'https://vega.github.io/vega-datasets/';
+const VEGA_UNFURL_BASE_URL = 'https://vega-unfurl.glitch.me/';
 
 /**
  * Converts shared Slack link to an unfurl object
@@ -23,15 +24,7 @@ function getLinkInfo(link) {
 
   if (link.url.startsWith(VEGA_EDITOR_BASE_URL)) {
     // extract vega spec from url
-    const vegaSpecUrlPart = link.url.replace(VEGA_EDITOR_BASE_URL, '');
-    const vegaSpecPosition = vegaSpecUrlPart.indexOf('/');
-    const vegaSpecType = vegaSpecUrlPart.substring(0, vegaSpecPosition);
-    console.log(`\tspec type: ${vegaSpecType}`);
-
-    const compressedVegaSpec = vegaSpecUrlPart.substring(vegaSpecPosition + 1);
-    const vegaSpecString = lzString.decompressFromEncodedURIComponent(compressedVegaSpec);
-    const vegaSpec = JSON.parse(vegaSpecString);
-    // console.log(vegaSpecString);
+    const vegaSpec = getVegaSpec(VEGA_EDITOR_BASE_URL, link.url);
 
     // extract vega spec title, description and json schema info
     const title = vegaSpec['title'];
@@ -78,6 +71,26 @@ function getLinkInfo(link) {
   }
   return linkInfo;
 } // end of getLinkInfo()
+
+
+/**
+ * Creates Vega spec from encoded vega spec url.
+ * @param {string} baseUrl Vega spec base url to strip out.
+ * @param {*} vegaSpecUrl Full Vega spec url.
+ */
+function getVegaSpec(baseUrl, vegaSpecUrl) {
+  // extract vega spec from url
+  const vegaSpecUrlPart = vegaSpecUrl.replace(baseUrl, '');
+  const vegaSpecPosition = vegaSpecUrlPart.indexOf('/');
+  const vegaSpecType = vegaSpecUrlPart.substring(0, vegaSpecPosition);
+  console.log(`\tspec type: ${vegaSpecType}`);
+
+  const compressedVegaSpec = vegaSpecUrlPart.substring(vegaSpecPosition + 1);
+  const vegaSpecString = lzString.decompressFromEncodedURIComponent(compressedVegaSpec);
+  const vegaSpec = JSON.parse(vegaSpecString);  
+  // console.log(vegaSpecString);
+  return vegaSpec;
+}
 
 
 /**
