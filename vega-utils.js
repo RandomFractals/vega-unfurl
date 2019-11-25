@@ -6,6 +6,7 @@ const VEGA_EDITOR_BASE_URL = 'https://vega.github.io/editor/#/url/';
 const VEGA_SCHEMA_BASE_URL = 'https://vega.github.io/schema/';
 const VEGA_DATA_BASE_URL = 'https://vega.github.io/vega-datasets/';
 const VEGA_UNFURL_BASE_URL = 'https://vega-unfurl.glitch.me/';
+const VEGA_DOCUMENT_TYPES = ['svg', 'png', 'vg.json'];
 
 /**
  * Converts shared Slack link to an unfurl object
@@ -65,6 +66,14 @@ function getLinkInfo(link) {
       });
     }
 
+    // add download links
+    fields.push({
+      title: 'save',
+      value: VEGA_DOCUMENT_TYPES.map(type => { 
+        return `<${VEGA_UNFURL_BASE_URL}${type}#url/${vegaSpecInfo.type}/${vegaSpecInfo.compressedString}|${type}>`;
+      }).join(' | ')
+    });
+
     if (fields.length > 0) {
       // add fields
       linkInfo.fields = fields;
@@ -92,7 +101,8 @@ function getVegaSpecInfo(baseUrl, vegaSpecUrl) {
   // console.log(vegaSpecString);
   return {
     type: vegaSpecType,
-    spec: vegaSpec
+    spec: vegaSpec,
+    compressedString: compressedVegaSpec
   };
 }
 
