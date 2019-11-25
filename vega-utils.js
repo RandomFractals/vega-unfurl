@@ -68,7 +68,7 @@ function getLinkInfo(link) {
 
     // add download links
     fields.push({
-      title: 'save',
+      title: 'view/save',
       value: VEGA_DOCUMENT_TYPES.map(type => { 
         return `<${VEGA_UNFURL_BASE_URL}${type}#url/${vegaSpecInfo.type}/${vegaSpecInfo.compressedString}|${type}>`;
       }).join(' | ')
