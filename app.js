@@ -9,6 +9,9 @@ const { WebClient } = require('@slack/web-api');
 const keyBy = require('lodash.keyby');
 const omit = require('lodash.omit');
 const mapValues = require('lodash.mapvalues');
+const compactStringify = require('json-stringify-pretty-compact');
+const vega = require('vega');
+const vegaLite = require('vega-lite');
 const vegaUtils = require('./vega-utils.js');
 
 // create Slack events adapter with envelope data and headers
@@ -60,10 +63,17 @@ app.use('/slack/events', slackEvents.requestListener());
 
 // add vega document handlers
 app.use('/vg.json', (request, response) => {
-  const url = request.originalUrl;
-  const vegaSpecInfo = vegaUtils.getVegaSpecInfo('/vg.json/', url);
+  const vegaSpecInfo = vegaUtils.getVegaSpecInfo('/vg.json/', request.originalUrl);
   response.setHeader('Content-Type', 'application/json');
-  response.send(vegaSpecInfo.specString);
+  if (vegaSpecInfo.type === 'vega') {
+    // send decoded vega spec string
+    response.send(vegaSpecInfo.specString);
+  } else {
+    // compile vega-lite spec to vega
+    const vgSpec = vegaLite.compile(vegaSpecInfo.spec).spec;
+    // send compiled vega spec json
+    response.send(compactStringify(vgSpec));
+  }
 });
 
 // mount json body parser
