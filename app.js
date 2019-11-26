@@ -61,7 +61,7 @@ const app = express();
 // add slack events listener
 app.use('/slack/events', slackEvents.requestListener());
 
-// add vega document handlers
+// add vega document handler
 app.use('/vg.json', (request, response) => {
   const vegaSpecInfo = vegaUtils.getVegaSpecInfo('/vg.json/', request.originalUrl);
   response.setHeader('Content-Type', 'application/json');
@@ -74,6 +74,14 @@ app.use('/vg.json', (request, response) => {
     // send compiled vega spec json
     response.send(compactStringify(vgSpec));
   }
+});
+
+// add vega-lite document hander
+app.use('/vl.json', (request, response) => {
+  const vegaSpecInfo = vegaUtils.getVegaSpecInfo('/vl.json/', request.originalUrl);
+  response.setHeader('Content-Type', 'application/json');
+  // send decoded vega-lite spec string
+  response.send(vegaSpecInfo.specString);
 });
 
 // mount json body parser
