@@ -68,12 +68,19 @@ function getLinkInfo(link) {
       });
     }
 
-    // add download links
+    // create view/save links
+    let viewLinks = VEGA_DOCUMENT_TYPES.map(type => { 
+        return `<${VEGA_UNFURL_BASE_URL}${type}/${vegaSpecInfo.type}/${vegaSpecInfo.compressedString}|${type}>`;
+      }).join(' | ');
+    if (vegaSpecInfo.type === 'vega-lite') {
+      // add vl.json link
+      viewLinks += ` | <${VEGA_UNFURL_BASE_URL}vl.json/vega-lite/${vegaSpecInfo.compressedString}|vl.json>`;
+    }
+
+    // add view/save links
     fields.push({
       title: 'view/save',
-      value: VEGA_DOCUMENT_TYPES.map(type => { 
-        return `<${VEGA_UNFURL_BASE_URL}${type}/${vegaSpecInfo.type}/${vegaSpecInfo.compressedString}|${type}>`;
-      }).join(' | ')
+      value: viewLinks
     });
 
     if (fields.length > 0) {
