@@ -35,13 +35,13 @@ function getLinkInfo(link) {
 
     // add title
     if (title !== undefined) {
-      linkInfo['title'] = `${title}.${vegaSpecInfo.type}`;
+      linkInfo['title'] = `${title}.${vegaSpecInfo.fileType}`;
     }
     else if (description !== undefined) {
       // use description for link title
-      linkInfo['title'] = `${description.substr(0, 100)}.${vegaSpecInfo.type}`;
+      linkInfo['title'] = `${description.substr(0, 100)}.${vegaSpecInfo.fileType}`;
     } else {
-      linkInfo['title'] = `Unititled.${vegaSpecInfo.type}`;
+      linkInfo['title'] = `Unititled.${vegaSpecInfo.fileType}`;
     }
 
     // add description
@@ -102,7 +102,8 @@ function getVegaSpecInfo(baseUrl, vegaSpecUrl) {
   const vegaSpec = JSON.parse(vegaSpecString);  
   // console.log(vegaSpecString);
   return {
-    type: (vegaSpecType === 'vega' ? 'vg.json' : 'vl.json'),
+    type: vegaSpecType,
+    fileType: (vegaSpecType === 'vega' ? 'vg.json' : 'vl.json'),
     spec: vegaSpec,
     compressedString: compressedVegaSpec
   };
