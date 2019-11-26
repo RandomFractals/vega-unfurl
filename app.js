@@ -58,6 +58,14 @@ const app = express();
 // add slack events listener
 app.use('/slack/events', slackEvents.requestListener());
 
+// add vega document handlers
+app.use('/vg.json', (request, response) => {
+  const url = request.originalUrl;
+  const vegaSpecInfo = vegaUtils.getVegaSpecInfo('/vg.json/', url);
+  response.setHeader('Content-Type', 'application/json');
+  response.send(vegaSpecInfo.specString);
+});
+
 // mount json body parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

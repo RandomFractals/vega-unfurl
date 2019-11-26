@@ -72,7 +72,7 @@ function getLinkInfo(link) {
     fields.push({
       title: 'view/save',
       value: VEGA_DOCUMENT_TYPES.map(type => { 
-        return `<${VEGA_UNFURL_BASE_URL}${type}#url/${vegaSpecInfo.type}/${vegaSpecInfo.compressedString}|${type}>`;
+        return `<${VEGA_UNFURL_BASE_URL}${type}/${vegaSpecInfo.type}/${vegaSpecInfo.compressedString}|${type}>`;
       }).join(' | ')
     });
 
@@ -105,6 +105,7 @@ function getVegaSpecInfo(baseUrl, vegaSpecUrl) {
     type: vegaSpecType,
     fileType: (vegaSpecType === 'vega' ? 'vg.json' : 'vl.json'),
     spec: vegaSpec,
+    specString: vegaSpecString,
     compressedString: compressedVegaSpec
   };
 }
@@ -178,6 +179,7 @@ function getDataUrls(spec) {
   return dataUrls;
 }
 
-module.exports = {
-  getLinkInfo: getLinkInfo
+module.exports = {  
+  getLinkInfo: getLinkInfo,
+  getVegaSpecInfo: getVegaSpecInfo
 };
