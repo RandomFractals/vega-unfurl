@@ -92,8 +92,14 @@ app.use('/svg', (request, response) => {
     // compile vega-lite spec to vega
     vgSpec = vegaLite.compile(vegaSpecInfo.spec).spec;
   }
+
   // create headless vega viewer instance for svg gen.
-  const vegaView = new vega.View(vega.parse(vgSpec), {renderer: 'none'}).finalize();
+  const vegaView = new vega.View(vega.parse(vgSpec), {
+    loader: vega.loader({baseURL: 'https://vega.github.io/vega-datasets/'}),
+    renderer: 'none'
+  }).finalize();
+
+  // create and send svg image
   vegaView.toSVG().then(svg => {
     response.setHeader('Content-Type', 'image/svg+xml');
     response.send(svg);
