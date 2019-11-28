@@ -84,6 +84,22 @@ app.use('/vl.json', (request, response) => {
   response.send(vegaSpecInfo.specString);
 });
 
+// add vega svg document handler
+app.use('/svg', (request, response) => {
+  const vegaSpecInfo = vegaUtils.getVegaSpecInfo('/svg/', request.originalUrl);
+  let vgSpec = vegaSpecInfo.spec;
+  if (vegaSpecInfo.type === 'vega-lite') {
+    // compile vega-lite spec to vega
+    vgSpec = vegaLite.compile(vegaSpecInfo.spec).spec;
+  }
+  // create headless vega viewer instance for svg gen.
+  const vegaView = new vega.View(vega.parse(vgSpec), {renderer: 'none'}).finalize();
+  vegaView.toSVG().then(svg => {
+    response.setHeader('Content-Type', 'image/svg+xml');
+    response.send(svg);
+  });
+});
+
 // mount json body parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
