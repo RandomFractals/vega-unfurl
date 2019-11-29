@@ -1,5 +1,5 @@
 # vega-unfurl
-Slack app for Vega Editor links preview
+Slack app for [Vega Editor](https://vega.github.io/editor) links preview ...
 
 # Usage Example
 
@@ -37,42 +37,14 @@ Stacked Bar Chart JSON spec example into online [Vega Editor](https://vega.githu
 }
 ```
 
-2. Click Share in Vega Editor to copy encoded vega spec URL.
+2. Click Share in Vega Editor to copy url-encoded Vega spec.
 
-3. Paste vega spec URL into a Slack channel in a workspace with installed vega-unfurl app.
+3. Paste Vega spec URL into a Slack channel in a workspace with installed vega-unfurl Slack app.
 
-You should see that shared link expended with new attachment containing vega chart title,
-description and json schema information extracted from the shared encoded link.
+You should see that shared url-encoded vega(-lite) spec link expended with new attachment containing vega chart title, description, vega json schema information, data links, view/save `.vg/.vl.json` links & image preview:
 
 ![Vega Unfurl Example](https://github.com/RandomFractals/vega-unfurl/blob/master/images/vega-unfurl-example.png?raw=true 
  "Vega Unfurl Example")
-
-### Example with Data link
-
-```json
-{
-  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-  "title": "Historgram",
-  "description": "Select horsepower bins and get data.",
-  "data": {"url": "https://vega.github.io/vega-datasets/data/cars.json"},
-  "mark": "bar",
-  "encoding": {
-    "x": {"field": "Horsepower", "type": "quantitative", "bin": true},
-     "y": {
-        "aggregate": "count",
-        "type": "quantitative"
-     }
-  },
-  "selection": {
-    "select": {"type": "multi"}
-  }
-}
-```
-
-Unfurls to:
-
-![Vega Unfurl Data Links](https://github.com/RandomFractals/vega-unfurl/blob/master/images/vega-unfurl-data.png?raw=true 
- "Vega Unfurl Data Links Example")
 
 # Dev Log
 
