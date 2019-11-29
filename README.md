@@ -52,7 +52,7 @@ See this dev.to post for more info:
 
 https://dev.to/tarasnovak/vega-unfurl-slack-app-13i8
 
-& [#vegaUnfurl] tag on Twitter for the latest & greatest updates on this front :) ...
+& [#vegaUnfurl](https://twitter.com/search?q=%23vegaUnfurl&src=typed_query) tag on Twitter for the latest & greatest updates on this front :) ...
 
 # References
 
