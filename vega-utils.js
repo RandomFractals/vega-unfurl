@@ -6,7 +6,7 @@ const VEGA_EDITOR_BASE_URL = 'https://vega.github.io/editor/#/url/';
 const VEGA_SCHEMA_BASE_URL = 'https://vega.github.io/schema/';
 const VEGA_DATA_BASE_URL = 'https://vega.github.io/vega-datasets/';
 const VEGA_UNFURL_BASE_URL = 'https://vega-unfurl.glitch.me/';
-const VEGA_DOCUMENT_TYPES = ['svg', 'png', 'vg.json'];
+const VEGA_DOCUMENT_TYPES = ['vg.json'];
 
 /**
  * Converts shared Slack link to an unfurl object
