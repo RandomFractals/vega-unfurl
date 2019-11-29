@@ -4,24 +4,35 @@ Slack app for Vega Editor links preview
 # Usage Example
 
 1. Paste this [Vega-Lite](https://vega.github.io/vega-lite/) 
-Bar Chart JSON spec example into online [Vega Editor](https://vega.github.io/editor):
+Stacked Bar Chart JSON spec example into online [Vega Editor](https://vega.github.io/editor):
 
 ```json
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-  "title": "Bar Chart",
-  "description": "A simple bar chart with embedded data.",
-  "data": {
-    "values": [
-      {"a": "A", "b": 28}, {"a": "B", "b": 55}, {"a": "C", "b": 43},
-      {"a": "D", "b": 91}, {"a": "E", "b": 81}, {"a": "F", "b": 53},
-      {"a": "G", "b": 19}, {"a": "H", "b": 87}, {"a": "I", "b": 52}
-    ]
-  },
+  "title": "Weather by Month",
+  "description": "Stacked Bar Chart",
+  "data": {"url": "https://vega.github.io/vega-datasets/data/seattle-weather.csv"},
   "mark": "bar",
   "encoding": {
-    "x": {"field": "a", "type": "ordinal"},
-    "y": {"field": "b", "type": "quantitative"}
+    "x": {
+      "timeUnit": "month",
+      "field": "date",
+      "type": "ordinal",
+      "axis": {"title": "Month of the year"}
+    },
+    "y": {
+      "aggregate": "count",
+      "type": "quantitative"
+    },
+    "color": {
+      "field": "weather",
+      "type": "nominal",
+      "scale": {
+        "domain": ["sun", "fog", "drizzle", "rain", "snow"],
+        "range": ["#e7ba52", "#c7c7c7", "#aec7e8", "#1f77b4", "#9467bd"]
+      },
+      "legend": {"title": "Weather type"}
+    }
   }
 }
 ```
@@ -68,6 +79,8 @@ Unfurls to:
 See this dev.to post for more info:
 
 https://dev.to/tarasnovak/vega-unfurl-slack-app-13i8
+
+& [#vegaUnfurl] tag on Twitter for the latest & greatest updates on this front :) ...
 
 # References
 
