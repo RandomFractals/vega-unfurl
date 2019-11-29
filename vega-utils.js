@@ -19,7 +19,6 @@ function getLinkInfo(link) {
     "color": "#36a64f",
     "title": link.url,
     "title_link": link.url,
-    "footer": "Vega Slack",
     url: link.url
   };
 
