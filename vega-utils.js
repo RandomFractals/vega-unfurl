@@ -16,9 +16,9 @@ const VEGA_DOCUMENT_TYPES = ['svg', 'png', 'vg.json'];
 function getLinkInfo(link) {
   // create initial unfurl link info
   const linkInfo = {
-    "color": "#36a64f",
-    "title": link.url,
-    "title_link": link.url,
+    color: "#36a64f",
+    title: link.url,
+    title_link: link.url,
     url: link.url
   };
 
