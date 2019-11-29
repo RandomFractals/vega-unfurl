@@ -87,14 +87,14 @@ app.use('/vl.json', (request, response) => {
 // add vega svg document handler
 app.use('/svg', (request, response) => {
   const vegaSpecInfo = vegaUtils.getVegaSpecInfo('/svg/', request.originalUrl);
-  let vgSpec = vegaSpecInfo.spec;
+  let vegaSpec = vegaSpecInfo.spec;
   if (vegaSpecInfo.type === 'vega-lite') {
     // compile vega-lite spec to vega
-    vgSpec = vegaLite.compile(vegaSpecInfo.spec).spec;
+    vegaSpec = vegaLite.compile(vegaSpecInfo.spec).spec;
   }
 
   // create headless vega viewer instance for svg gen.
-  const vegaView = new vega.View(vega.parse(vgSpec), {
+  const vegaView = new vega.View(vega.parse(vegaSpec), {
     loader: vega.loader({baseURL: 'https://vega.github.io/vega-datasets/'}),
     renderer: 'none'
   }).finalize();
@@ -103,6 +103,28 @@ app.use('/svg', (request, response) => {
   vegaView.toSVG().then(svg => {
     response.setHeader('Content-Type', 'image/svg+xml');
     response.send(svg);
+  });
+});
+
+// add vega png document handler
+app.use('/png', (request, response) => {
+  const vegaSpecInfo = vegaUtils.getVegaSpecInfo('/png/', request.originalUrl);
+  let vegaSpec = vegaSpecInfo.spec;
+  if (vegaSpecInfo.type === 'vega-lite') {
+    // compile vega-lite spec to vega
+    vegaSpec = vegaLite.compile(vegaSpecInfo.spec).spec;
+  }
+
+  // create headless vega viewer instance for svg gen.
+  const vegaView = new vega.View(vega.parse(vegaSpec), {
+    loader: vega.loader({baseURL: 'https://vega.github.io/vega-datasets/'}),
+    renderer: 'none'
+  }).finalize();
+
+  // create and send png image
+  vegaView.toCanvas().then(canvas => {
+    response.setHeader('Content-Type', 'image/png');
+    canvas.createPNGStream().pipe(response);
   });
 });
 
