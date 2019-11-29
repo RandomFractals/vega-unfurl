@@ -33,6 +33,9 @@ function getLinkInfo(link) {
     const description = vegaSpec['description'];
     const jsonSchemaUrl = vegaSpec['$schema'];
 
+    // add preview image
+    linkInfo['image_url'] = `${VEGA_UNFURL_BASE_URL}svg/${vegaSpecInfo.type}/${vegaSpecInfo.compressedString}`;
+
     // add title
     if (title !== undefined) {
       linkInfo['title'] = `${title}.${vegaSpecInfo.fileType}`;
