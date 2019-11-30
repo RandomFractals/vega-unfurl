@@ -37,14 +37,22 @@ Stacked Bar Chart JSON spec example into online [Vega Editor](https://vega.githu
 }
 ```
 
-2. Click Share in Vega Editor to copy url-encoded Vega spec.
+2. Click Share in Vega Editor to copy url-encoded Vega(-Lite) spec.
 
-3. Paste Vega spec URL into a Slack channel in a workspace with installed vega-unfurl Slack app.
+3. Paste Vega spec URL into a Slack channel in a workspace with installed Vega Unfurl Slack app.
 
-You should see that shared url-encoded vega(-lite) spec link expended with new attachment containing vega chart title, description, vega json schema information, data links, view/save `.vg/.vl.json` links & image preview:
+You should see that shared url-encoded vega(-lite) spec link expended with new Slack message attachment containing vega chart title, description, vega json schema link, data links, view/save `.vg/.vl.json` links & image preview:
 
 ![Vega Unfurl Example](https://github.com/RandomFractals/vega-unfurl/blob/master/images/vega-unfurl-example.png?raw=true 
  "Vega Unfurl Example")
+
+For this particular Stacked Bar Chart example those links are:
+
+- schema: [vega-lite | v4](https://vega.github.io/schema/vega-lite/v4.json)
+- data: https://vega.github.io/vega-datasets/data/seattle-weather.csv
+- view/save: [vg.json](https://vega-unfurl.glitch.me/vg.json/vega-lite/N4KABGBEAkDODGALApgWwIaQFxUQFzwAdYsB6UgN2QHN0A6agSz0QFcAjOxge1IRQyUa6ALQAbZskoAWOgCtY3AHaQANOCh5mY5NigB1ZOhbIATmHYBPMAFllLNRsgATZAlONCW5XsgBlPHR4AGtkZzAAIXRzAGFEaLxHCBdjTBxgSFZTMV98IhJyKloGZjZOHiFaEWdU2GQ8WFIawL4jAh0RAHc2lFM6eFgKSABfdWSMU2DfdmikqGQleG5nRiVqPVAIZIAPDY0tzUZUZABVJWZfVHtEOYPIADNGZDFnX2bdMYPNS0JdHEhuKYVkp0DlPnd0NtGLANpAtHgdL47EoWGBuPcwCYwJYjKYRvswKMCZBLHsvlB0NRqKZhHg-lAlqwUbctnCfvTIABHVjoFHMYyMKiQAlEu5LMSAslfB5PF6+brGXos5J4dm+JTcVCrUHKqAIUH0zbkqDOTXoVZ6ADakFgTLUUHu3HWqhNHgAXm7ES7IKZzSpvbANZ1IABdcHS31renWgDEyAA7DMAKwAJntkBj8HjWaz6Zj6GQWeQAA48wBGe7xxPSPMATmkADZE68QwSIKLpTpqAtXuk4doOYZFWZMWrhiKNOPx0A) | [vl.json](https://vega-unfurl.glitch.me/vl.json/vega-lite/N4KABGBEAkDODGALApgWwIaQFxUQFzwAdYsB6UgN2QHN0A6agSz0QFcAjOxge1IRQyUa6ALQAbZskoAWOgCtY3AHaQANOCh5mY5NigB1ZOhbIATmHYBPMAFllLNRsgATZAlONCW5XsgBlPHR4AGtkZzAAIXRzAGFEaLxHCBdjTBxgSFZTMV98IhJyKloGZjZOHiFaEWdU2GQ8WFIawL4jAh0RAHc2lFM6eFgKSABfdWSMU2DfdmikqGQleG5nRiVqPVAIZIAPDY0tzUZUZABVJWZfVHtEOYPIADNGZDFnX2bdMYPNS0JdHEhuKYVkp0DlPnd0NtGLANpAtHgdL47EoWGBuPcwCYwJYjKYRvswKMCZBLHsvlB0NRqKZhHg-lAlqwUbctnCfvTIABHVjoFHMYyMKiQAlEu5LMSAslfB5PF6+brGXos5J4dm+JTcVCrUHKqAIUH0zbkqDOTXoVZ6ADakFgTLUUHu3HWqhNHgAXm7ES7IKZzSpvbANZ1IABdcHS31renWgDEyAA7DMAKwAJntkBj8HjWaz6Zj6GQWeQAA48wBGe7xxPSPMATmkADZE68QwSIKLpTpqAtXuk4doOYZFWZMWrhiKNOPx0A)
+
+You can also use Vega Unfurl slack app document handlers to save that bar chart [svg](https://vega-unfurl.glitch.me/svg/vega-lite/N4KABGBEAkDODGALApgWwIaQFxUQFzwAdYsB6UgN2QHN0A6agSz0QFcAjOxge1IRQyUa6ALQAbZskoAWOgCtY3AHaQANOCh5mY5NigB1ZOhbIATmHYBPMAFllLNRsgATZAlONCW5XsgBlPHR4AGtkZzAAIXRzAGFEaLxHCBdjTBxgSFZTMV98IhJyKloGZjZOHiFaEWdU2GQ8WFIawL4jAh0RAHc2lFM6eFgKSABfdWSMU2DfdmikqGQleG5nRiVqPVAIZIAPDY0tzUZUZABVJWZfVHtEOYPIADNGZDFnX2bdMYPNS0JdHEhuKYVkp0DlPnd0NtGLANpAtHgdL47EoWGBuPcwCYwJYjKYRvswKMCZBLHsvlB0NRqKZhHg-lAlqwUbctnCfvTIABHVjoFHMYyMKiQAlEu5LMSAslfB5PF6+brGXos5J4dm+JTcVCrUHKqAIUH0zbkqDOTXoVZ6ADakFgTLUUHu3HWqhNHgAXm7ES7IKZzSpvbANZ1IABdcHS31renWgDEyAA7DMAKwAJntkBj8HjWaz6Zj6GQWeQAA48wBGe7xxPSPMATmkADZE68QwSIKLpTpqAtXuk4doOYZFWZMWrhiKNOPx0A) || [png](https://vega-unfurl.glitch.me/png/vega-lite/N4KABGBEAkDODGALApgWwIaQFxUQFzwAdYsB6UgN2QHN0A6agSz0QFcAjOxge1IRQyUa6ALQAbZskoAWOgCtY3AHaQANOCh5mY5NigB1ZOhbIATmHYBPMAFllLNRsgATZAlONCW5XsgBlPHR4AGtkZzAAIXRzAGFEaLxHCBdjTBxgSFZTMV98IhJyKloGZjZOHiFaEWdU2GQ8WFIawL4jAh0RAHc2lFM6eFgKSABfdWSMU2DfdmikqGQleG5nRiVqPVAIZIAPDY0tzUZUZABVJWZfVHtEOYPIADNGZDFnX2bdMYPNS0JdHEhuKYVkp0DlPnd0NtGLANpAtHgdL47EoWGBuPcwCYwJYjKYRvswKMCZBLHsvlB0NRqKZhHg-lAlqwUbctnCfvTIABHVjoFHMYyMKiQAlEu5LMSAslfB5PF6+brGXos5J4dm+JTcVCrUHKqAIUH0zbkqDOTXoVZ6ADakFgTLUUHu3HWqhNHgAXm7ES7IKZzSpvbANZ1IABdcHS31renWgDEyAA7DMAKwAJntkBj8HjWaz6Zj6GQWeQAA48wBGe7xxPSPMATmkADZE68QwSIKLpTpqAtXuk4doOYZFWZMWrhiKNOPx0A) for sharing with your vega data viz team.
 
 # Dev Log
 
